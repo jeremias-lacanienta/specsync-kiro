@@ -1,0 +1,132 @@
+.App {
+  text-align: center;
+}
+
+.spec-editor {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 16px;
+  min-height: 400px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.spec-line {
+  position: relative;
+  padding: 2px 0;
+  border-left: 3px solid transparent;
+}
+
+.spec-line:hover {
+  background-color: #e3f2fd;
+  border-left-color: #2196f3;
+}
+
+.spec-line.has-annotation {
+  border-left-color: #ff9800;
+  background-color: #fff3e0;
+}
+
+.annotation {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.annotation-author {
+  font-weight: 600;
+  color: #1976d2;
+  font-size: 0.875rem;
+}
+
+.annotation-content {
+  margin: 8px 0;
+  color: #333;
+}
+
+.annotation-timestamp {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.kiro-suggestion {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.kiro-suggestion .kiro-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  margin-right: 12px;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+.participants-list {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.participant-chip {
+  display: inline-block;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 12px;
+  border-radius: 16px;
+  margin: 4px;
+  font-size: 0.875rem;
+}
+
+.meeting-summary {
+  background-color: #e8f5e8;
+  border: 1px solid #4caf50;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.action-items {
+  background-color: #fff3e0;
+  border-left: 4px solid #ff9800;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.action-items ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.analyzing {
+  animation: pulse 2s infinite;
+}
