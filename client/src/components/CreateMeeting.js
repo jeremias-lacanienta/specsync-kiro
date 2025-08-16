@@ -187,11 +187,12 @@ Implement secure user authentication system for the web application.
                 onChange={(e) => setTitle(e.target.value)}
                 sx={{ mb: 3 }}
                 placeholder="e.g., User Authentication Feature Review"
+                data-tour="meeting-title"
               />
 
               <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="subtitle2">Specification Content</Typography>
-                <Button size="small" onClick={loadSampleSpec}>
+                <Button size="small" onClick={loadSampleSpec} data-tour="sample-spec">
                   Load Sample Spec
                 </Button>
               </Box>
@@ -210,9 +211,10 @@ Implement secure user authentication system for the web application.
                     fontSize: '14px'
                   }
                 }}
+                data-tour="spec-content"
               />
 
-              <Grid container spacing={2} sx={{ mb: 3 }}>
+              <Grid container spacing={2} sx={{ mb: 3 }} data-tour="user-info">
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
@@ -240,6 +242,7 @@ Implement secure user authentication system for the web application.
                 disabled={loading}
                 startIcon={loading ? <CircularProgress size={20} /> : <VideoCall />}
                 fullWidth
+                data-tour="create-meeting"
               >
                 {loading ? 'Creating Meeting...' : 'Create Meeting & Start Review'}
               </Button>
@@ -249,7 +252,7 @@ Implement secure user authentication system for the web application.
 
         {/* Join Existing Meeting */}
         <Grid item xs={12} md={4}>
-          <Card>
+          <Card data-tour="join-meeting">
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <Person sx={{ mr: 1, color: 'primary.main' }} />
@@ -351,7 +354,7 @@ Implement secure user authentication system for the web application.
           )}
 
           {/* Features Overview */}
-          <Card>
+          <Card data-tour="features">
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 What SpecSync Does

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Container, AppBar, Toolbar, Typography, Box } from '@mui/material';
+import { Container, AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
 import CreateMeeting from './components/CreateMeeting';
 import MeetingRoom from './components/MeetingRoom';
+import AutoDemo from './components/AutoDemo';
 import './App.css';
 
 const theme = createTheme({
@@ -24,6 +25,7 @@ const theme = createTheme({
 function App() {
   const [currentMeeting, setCurrentMeeting] = useState(null);
   const [user, setUser] = useState(null);
+  const [showDemo, setShowDemo] = useState(false);
 
   useEffect(() => {
     // Listen for focus commands from Kiro plugin
@@ -40,6 +42,15 @@ function App() {
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  // Auto-start demo after 3 seconds for video recording
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowDemo(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const handleMeetingCreated = (meetingData) => {
@@ -63,6 +74,15 @@ function App() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             SpecSync - AI-Powered Spec Review
           </Typography>
+          {!currentMeeting && (
+            <Button 
+              color="inherit" 
+              onClick={() => setShowDemo(true)}
+              sx={{ ml: 2 }}
+            >
+              🎬 Start Demo
+            </Button>
+          )}
           {currentMeeting && (
             <Typography variant="body2">
               Meeting: {currentMeeting.title}
@@ -85,6 +105,11 @@ function App() {
           />
         )}
       </Container>
+      
+      <AutoDemo 
+        isActive={showDemo} 
+        onComplete={() => setShowDemo(false)} 
+      />
     </ThemeProvider>
   );
 }

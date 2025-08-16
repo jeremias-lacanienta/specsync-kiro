@@ -1,140 +1,73 @@
-# SpecSync Video Presentation Script
+# SpecSync - 3 Minute DevPost Video Script
 
-## Opening (0:00-0:30)
-**[Screen: Kiro IDE with empty workspace]**
+## Opening (0:00-0:20)
+**[Screen: SpecSync running in Kiro webview]**
 
-"Hi! I'm going to show you how I built SpecSync - an AI-powered specification review meeting room - using Kiro's full feature set. What makes this special is that I used all three of Kiro's key capabilities: building from scratch, agent hooks, and spec-driven development."
+"Hi! I built SpecSync - an AI-powered specification review meeting room - using all three of Kiro's key capabilities: conversational coding from scratch, agent hooks, and spec-driven development. Let me show you how Kiro transformed my development process."
 
-## Part 1: Building and Vibe Coding from Scratch (0:30-2:00)
+## Part 1: Conversational Coding from Scratch (0:20-1:10)
 
-**[Screen: Show initial conversation with Kiro]**
+**[Screen: Show server/index.js WebSocket code]**
 
-"Let me start with how I structured my conversations with Kiro to build this project from scratch.
+"I structured my conversations with Kiro iteratively. I started with: 'I want to build an AI-powered specification review meeting room.' Kiro broke this into components: React frontend, Node.js backend, WebSocket collaboration.
 
-**My conversation approach was iterative and collaborative:**
-- I started with a simple concept: 'I want to build an AI-powered specification review meeting room'
-- Kiro helped me break this down into components: React frontend, Node.js backend, WebSocket real-time collaboration
-- I used natural language throughout: 'Make this work in Kiro's webview' or 'This needs to work across different projects'
+**[Highlight WebSocket code sections]**
 
-**[Screen: Show the most impressive code generation - the WebSocket real-time collaboration system]**
+The most impressive generation was the real-time collaboration system. I simply said 'I need real-time collaboration where team members can annotate spec lines instantly.' Kiro generated 296 lines of production-ready WebSocket code with Socket.IO, real-time annotations, meeting state management, and AI facilitation triggers.
 
-The most impressive code generation was when Kiro created the entire real-time collaboration system. I simply said 'I need real-time collaboration where team members can annotate spec lines and see each other's comments instantly.'
+**[Screen: Show working real-time collaboration]**
 
-**[Show server/index.js WebSocket code]**
+This complex real-time synchronization would typically take hours to implement manually."
 
-Kiro generated:
-- Complete WebSocket server with Socket.IO
-- Real-time annotation system
-- Meeting state management
-- AI facilitation triggers
-- Database integration with SQLite
+## Part 2: Agent Hooks (1:10-1:50)
 
-This was 296 lines of production-ready code that handled complex real-time state synchronization - something that would typically take hours to implement manually."
+**[Screen: Show .kiro/hooks directory with 3 files]**
 
-## Part 2: Agent Hooks (2:00-3:30)
+"I automated three key workflows with agent hooks:
 
-**[Screen: Show .kiro/hooks directory]**
+**[Quick show of each file]**
 
-"Next, let's talk about the agent hooks I created to automate key workflows.
+1. **Pre-meeting Analysis** - Automatically analyzes specs for ambiguous language and missing requirements
+2. **Real-time Facilitation** - Provides contextual AI guidance during meetings  
+3. **Post-meeting Summary** - Generates comprehensive summaries with action items
 
-**I automated three specific workflows:**
+**[Screen: Show hooks in action - maybe steering integration]**
 
-**[Screen: Show .kiro/hooks/pre-meeting-analysis.md]**
+These hooks improved my development process by reducing manual work, ensuring consistent quality, and creating seamless automation. When users upload specs, analysis happens automatically. During meetings, AI facilitation appears contextually. After meetings, summaries generate without intervention."
 
-1. **Pre-meeting Analysis Hook** - Automatically analyzes uploaded specs for common issues like ambiguous language, missing acceptance criteria, and vague requirements
+## Part 3: Spec-to-Code Development (1:50-2:40)
 
-**[Screen: Show .kiro/hooks/real-time-facilitation.md]**
+**[Screen: Show .kiro/specs directory - specsync-core.md and webview integration folder]**
 
-2. **Real-time Facilitation Hook** - Monitors meeting discussions and provides contextual AI guidance to keep conversations productive
+"I structured my specs hierarchically: core system architecture, feature specifications, and integration specs.
 
-**[Screen: Show .kiro/hooks/post-meeting-summary.md]**
+**[Screen: Show requirements with user stories and acceptance criteria]**
 
-3. **Post-meeting Summary Hook** - Automatically generates comprehensive summaries with action items and refined specifications when meetings end
+Each spec included clear user stories like 'As a developer, I want to review specs collaboratively' and specific acceptance criteria: 'WHEN a user adds an annotation THEN all participants SHALL see it in real-time.'
 
-**How these hooks improved my development process:**
-- **Reduced manual work** - No need to manually analyze specs or generate summaries
-- **Consistent quality** - Automated analysis catches issues I might miss
-- **Better user experience** - Real-time AI facilitation keeps meetings focused
-- **Faster iteration** - Automated summaries speed up the feedback loop
+**[Screen: Show .kiro/specs/specsync-kiro-webview-integration/requirements.md]**
 
-**[Screen: Show hook execution in action]**
+The most complex was the Kiro webview integration spec. I defined requirements for native webview panels, cross-project compatibility, and automatic server management.
 
-The hooks integrate seamlessly - when a user uploads a spec, analysis happens automatically. During meetings, facilitation suggestions appear contextually. After meetings, summaries generate without any manual intervention."
+**[Screen: Show the actual working webview integration]**
 
-## Part 3: Spec-to-Code Implementation (3:30-5:00)
+Then I told Kiro: 'Implement the webview integration spec' and it generated complete TypeScript extension code, WebView providers, and server management logic.
 
-**[Screen: Show .kiro/specs directory structure]**
+Spec-driven development provided clear direction, better AI collaboration, and quality assurance through acceptance criteria."
 
-"Finally, let me show you how I used Kiro's spec-driven development approach.
+## Closing: Results and Impact (2:40-3:00)
 
-**[Screen: Show .kiro/specs/specsync-core.md]**
+**[Screen: Show SpecSync running in Kiro webview with steering integration]**
 
-I structured my specs hierarchically:
-- **Core specification** defining the overall system architecture
-- **Feature specifications** for individual components like real-time collaboration
-- **Integration specifications** for Kiro webview integration
+"The result is SpecSync - a fully functional AI-powered specification review system that runs natively in Kiro's webview, works across projects without setup, and provides real-time collaboration with AI facilitation.
 
-**[Screen: Show requirements and acceptance criteria]**
+**[Screen: Show .kiro directory structure]**
 
-Each spec included:
-- Clear user stories: 'As a developer, I want to review specs collaboratively...'
-- Specific acceptance criteria: 'WHEN a user adds an annotation THEN all participants SHALL see it in real-time'
-- Technical requirements: WebSocket integration, database schema, API endpoints
+What impressed me most was how all three Kiro approaches worked together seamlessly. The specs guided implementation, hooks automated workflows, and conversational coding made complex development feel natural and collaborative.
 
-**[Screen: Show .kiro/specs/specsync-kiro-webview-integration/]**
+**[Screen: Final demo of 'Launch SpecSync' command working]**
 
-The most complex example was the Kiro webview integration spec. I defined:
-- Requirements for native webview panels
-- Cross-project compatibility needs  
-- Automatic server management
-- Error handling and fallbacks
-
-**[Screen: Show Kiro generating code from specs]**
-
-Then I simply told Kiro: 'Implement the webview integration spec' and it generated:
-- Complete TypeScript extension code
-- WebView provider classes
-- Server management logic
-- Error handling and user feedback
-
-**How spec-driven development improved my process:**
-- **Clear direction** - Specs provided a roadmap for implementation
-- **Better collaboration** - Specs served as documentation for the AI
-- **Quality assurance** - Acceptance criteria ensured complete implementation
-- **Easier iteration** - Changes to specs automatically guided code updates"
-
-## Part 4: Integration and Results (5:00-6:00)
-
-**[Screen: Show final working SpecSync application]**
-
-"The result is SpecSync - a fully functional AI-powered specification review system that:
-
-**[Screen: Show SpecSync running in Kiro webview]**
-
-- Runs natively in Kiro's webview (no external browser needed)
-- Works across different projects without setup
-- Provides real-time collaboration with AI facilitation
-- Automatically analyzes specs and generates meeting summaries
-
-**[Screen: Show steering integration]**
-
-The best part? It's integrated with Kiro's steering system, so I can just say 'Launch SpecSync' and everything happens automatically.
-
-**[Screen: Show global installation at ~/.kiro/specsync/]**
-
-And because I built it with cross-project compatibility in mind, it works in any Kiro workspace through the global installation - install once, use everywhere."
-
-## Closing (6:00-6:30)
-
-**[Screen: Show project structure and key files]**
-
-"What impressed me most about building with Kiro was how all three approaches - building from scratch, agent hooks, and spec-driven development - worked together seamlessly. 
-
-The specs guided the implementation, the hooks automated the workflows, and Kiro's conversational coding made the whole process feel natural and collaborative.
-
-SpecSync isn't just a tool I built - it's a demonstration of how AI-assisted development can transform complex projects into manageable, iterative conversations.
-
-Thanks for watching!"
+SpecSync demonstrates how AI-assisted development transforms complex projects into manageable, iterative conversations. Thanks for watching!"
 
 ---
 
