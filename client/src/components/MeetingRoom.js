@@ -81,45 +81,6 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
 
     window.addEventListener('kiro-suggestion', handleKiroSuggestion);
     return () => window.removeEventListener('kiro-suggestion', handleKiroSuggestion);
-
-    // Join the meeting
-    newSocket.emit('join-meeting', {
-      meetingId: meeting.id,
-      userName: user.name,
-      role: user.role
-    });
-
-    // Socket event listeners
-    newSocket.on('participant-joined', (participant) => {
-      setParticipants(prev => [...prev, participant]);
-    });
-
-    newSocket.on('participant-left', (participant) => {
-      setParticipants(prev => prev.filter(p => p.id !== participant.id));
-    });
-
-    newSocket.on('meeting-state', (state) => {
-      setParticipants(state.participants || []);
-      setAnnotations(state.annotations || []);
-    });
-
-    newSocket.on('new-annotation', (annotation) => {
-      setAnnotations(prev => [...prev, annotation]);
-    });
-
-    newSocket.on('kiro-suggestion', (suggestion) => {
-      setKiroSuggestions(prev => [...prev, { ...suggestion, id: Date.now() }]);
-    });
-
-    newSocket.on('meeting-ended', ({ summary }) => {
-      setMeetingEnded(true);
-      setMeetingSummary(summary);
-      setShowSummary(true);
-    });
-
-    return () => {
-      newSocket.close();
-    };
   }, [meeting.id, user.name, user.role]);
 
   const handleLineClick = (lineIndex) => {
