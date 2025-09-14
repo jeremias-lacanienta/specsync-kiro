@@ -17,7 +17,9 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  IconButton,
+  Snackbar
 } from '@mui/material';
 import {
   ExitToApp,
@@ -25,28 +27,60 @@ import {
   Psychology,
   Group,
   Assignment,
-  CheckCircle
+  CheckCircle,
+  ContentCopy,
+  Share
 } from '@mui/icons-material';
-import io from 'socket.io-client';
+import specSyncService from '../services/specSyncService';
 
 const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
-  const [socket, setSocket] = useState(null);
-  const [participants, setParticipants] = useState([]);
-  const [annotations, setAnnotations] = useState([]);
+  const [participants, setParticipants] = useState(meeting.participants || []);
+  const [annotations, setAnnotations] = useState(meeting.annotations || []);
   const [newAnnotation, setNewAnnotation] = useState('');
   const [selectedLine, setSelectedLine] = useState(null);
   const [kiroSuggestions, setKiroSuggestions] = useState([]);
   const [meetingEnded, setMeetingEnded] = useState(false);
   const [meetingSummary, setMeetingSummary] = useState(null);
   const [showSummary, setShowSummary] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
   
   const specRef = useRef(null);
   const specLines = meeting.specContent.split('\n');
 
+  // Copy meeting ID to clipboard
+  const copyMeetingId = async () => {
+    try {
+      await navigator.clipboard.writeText(meeting.id);
+      setCopySuccess(true);
+    } catch (err) {
+      console.error('Failed to copy meeting ID:', err);
+    }
+  };
+
+  // Subscribe to real-time updates
   useEffect(() => {
-    // Initialize socket connection
-    const newSocket = io('http://localhost:5000');
-    setSocket(newSocket);
+    const unsubscribe = specSyncService.subscribeToMeeting(meeting.id, {
+      onParticipantJoined: (participant) => {
+        setParticipants(prev => [...prev, participant]);
+      },
+      onNewAnnotation: (annotation) => {
+        setAnnotations(prev => [...prev, annotation]);
+      }
+    });
+
+    return unsubscribe;
+  }, [meeting.id]);
+
+  // Listen for Kiro suggestions
+  useEffect(() => {
+    const handleKiroSuggestion = (event) => {
+      if (event.detail.meetingId === meeting.id) {
+        setKiroSuggestions(prev => [...prev, event.detail.facilitation]);
+      }
+    };
+
+    window.addEventListener('kiro-suggestion', handleKiroSuggestion);
+    return () => window.removeEventListener('kiro-suggestion', handleKiroSuggestion);
 
     // Join the meeting
     newSocket.emit('join-meeting', {
@@ -92,22 +126,33 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
     setSelectedLine(lineIndex);
   };
 
-  const handleAddAnnotation = () => {
-    if (!newAnnotation.trim() || selectedLine === null || !socket) return;
+  const handleAddAnnotation = async () => {
+    if (!newAnnotation.trim() || selectedLine === null) return;
 
-    socket.emit('add-annotation', {
-      meetingId: meeting.id,
-      content: newAnnotation.trim(),
-      lineNumber: selectedLine + 1
-    });
+    try {
+      const annotation = await specSyncService.addAnnotation(
+        meeting.id,
+        newAnnotation.trim(),
+        selectedLine + 1,
+        user.name
+      );
 
-    setNewAnnotation('');
-    setSelectedLine(null);
+      setAnnotations(prev => [...prev, annotation]);
+      setNewAnnotation('');
+      setSelectedLine(null);
+    } catch (err) {
+      console.error('Failed to add annotation:', err);
+    }
   };
 
-  const handleEndMeeting = () => {
-    if (socket) {
-      socket.emit('end-meeting', { meetingId: meeting.id });
+  const handleEndMeeting = async () => {
+    try {
+      const summary = await specSyncService.endMeeting(meeting.id);
+      setMeetingEnded(true);
+      setMeetingSummary(summary);
+      setShowSummary(true);
+    } catch (err) {
+      console.error('Failed to end meeting:', err);
     }
   };
 
@@ -130,8 +175,28 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
         <Grid item xs={12} md={8}>
           <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-              <Typography variant="h6">{meeting.title}</Typography>
-              <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                <Typography variant="h6">{meeting.title}</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Meeting ID:
+                  </Typography>
+                  <Chip 
+                    label={meeting.id}
+                    size="small"
+                    variant="outlined"
+                    sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}
+                  />
+                  <IconButton 
+                    size="small" 
+                    onClick={copyMeetingId}
+                    title="Copy Meeting ID"
+                  >
+                    <ContentCopy fontSize="small" />
+                  </IconButton>
+                </Box>
+              </Box>
+              <Box sx={{ display: 'flex', gap: 1 }}>
                 <Chip 
                   icon={<Group />} 
                   label={`${participants.length} participants`} 
@@ -400,6 +465,14 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Copy Success Snackbar */}
+      <Snackbar
+        open={copySuccess}
+        autoHideDuration={3000}
+        onClose={() => setCopySuccess(false)}
+        message="Meeting ID copied to clipboard!"
+      />
     </Box>
   );
 };

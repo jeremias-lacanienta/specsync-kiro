@@ -97,31 +97,35 @@ Implement secure user authentication system for the web application.
     }
   };
 
-  const handleJoinExisting = () => {
+  const handleJoinExisting = async () => {
     if (!meetingId.trim() || !userName.trim()) {
       setError('Please enter meeting ID and your name');
       return;
     }
 
-    // For demo purposes, we'll simulate joining an existing meeting
-    const meetingData = {
-      id: meetingId.trim(),
-      title: 'Existing Meeting',
-      specContent: sampleSpec,
-      analysis: {
-        issues: [],
-        suggestions: [],
-        discussionPoints: ['Review existing requirements']
-      }
-    };
+    setLoading(true);
+    setError('');
 
-    const userData = {
-      name: userName.trim(),
-      role: userRole.trim() || 'participant'
-    };
+    try {
+      const meetingData = await specSyncService.joinMeeting(
+        meetingId.trim(),
+        userName.trim(),
+        userRole.trim() || 'participant'
+      );
 
-    onMeetingCreated(meetingData);
-    onJoinMeeting(userData);
+      const userData = {
+        name: userName.trim(),
+        role: userRole.trim() || 'participant'
+      };
+
+      onMeetingCreated(meetingData);
+      onJoinMeeting(userData);
+    } catch (err) {
+      setError('Meeting not found or failed to join. Please check the meeting ID.');
+      console.error('Error joining meeting:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const loadSampleSpec = () => {
