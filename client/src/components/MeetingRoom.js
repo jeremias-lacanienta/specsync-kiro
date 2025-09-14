@@ -37,8 +37,8 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
   console.log('MeetingRoom received meeting:', meeting); // Debug log
   console.log('MeetingRoom received user:', user); // Debug log
 
-  const [participants, setParticipants] = useState(meeting.participants || []);
-  const [annotations, setAnnotations] = useState(meeting.annotations || []);
+  const [participants, setParticipants] = useState((meeting && meeting.participants) || []);
+  const [annotations, setAnnotations] = useState((meeting && meeting.annotations) || []);
   const [newAnnotation, setNewAnnotation] = useState('');
   const [selectedLine, setSelectedLine] = useState(null);
   const [kiroSuggestions, setKiroSuggestions] = useState([]);
@@ -48,36 +48,8 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
   const [copySuccess, setCopySuccess] = useState(false);
   
   const specRef = useRef(null);
-  const specContent = meeting.specContent || meeting.spec_content || '';
+  const specContent = (meeting && (meeting.specContent || meeting.spec_content)) || '';
   const specLines = specContent.split('\n');
-
-  // Handle missing meeting data
-  if (!meeting || !meeting.id) {
-    return (
-      <Box sx={{ p: 4, textAlign: 'center' }}>
-        <Alert severity="error">
-          Meeting data is missing. Please try creating or joining a meeting again.
-        </Alert>
-        <Button variant="contained" onClick={onLeaveMeeting} sx={{ mt: 2 }}>
-          Back to Home
-        </Button>
-      </Box>
-    );
-  }
-
-  // Handle missing spec content
-  if (!specContent.trim()) {
-    return (
-      <Box sx={{ p: 4, textAlign: 'center' }}>
-        <Alert severity="warning">
-          No specification content found for this meeting.
-        </Alert>
-        <Button variant="contained" onClick={onLeaveMeeting} sx={{ mt: 2 }}>
-          Back to Home
-        </Button>
-      </Box>
-    );
-  }
 
   // Copy meeting ID to clipboard
   const copyMeetingId = async () => {
@@ -148,6 +120,34 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
       console.error('Failed to end meeting:', err);
     }
   };
+
+  // Handle missing meeting data (after all hooks)
+  if (!meeting || !meeting.id) {
+    return (
+      <Box sx={{ p: 4, textAlign: 'center' }}>
+        <Alert severity="error">
+          Meeting data is missing. Please try creating or joining a meeting again.
+        </Alert>
+        <Button variant="contained" onClick={onLeaveMeeting} sx={{ mt: 2 }}>
+          Back to Home
+        </Button>
+      </Box>
+    );
+  }
+
+  // Handle missing spec content (after all hooks)
+  if (!specContent.trim()) {
+    return (
+      <Box sx={{ p: 4, textAlign: 'center' }}>
+        <Alert severity="warning">
+          No specification content found for this meeting.
+        </Alert>
+        <Button variant="contained" onClick={onLeaveMeeting} sx={{ mt: 2 }}>
+          Back to Home
+        </Button>
+      </Box>
+    );
+  }
 
   const getLineAnnotations = (lineIndex) => {
     return annotations.filter(ann => ann.lineNumber === lineIndex + 1);
