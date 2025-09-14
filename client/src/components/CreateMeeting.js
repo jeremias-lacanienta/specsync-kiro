@@ -20,6 +20,8 @@ import {
 import { Add, VideoCall, Person, Description, Folder } from '@mui/icons-material';
 import specSyncService from '../services/specSyncService';
 import { useKiroIntegration } from '../hooks/useKiroIntegration';
+import SupabaseStatus from './SupabaseStatus';
+import SupabaseDebugger from './SupabaseDebugger';
 
 const CreateMeeting = ({ onMeetingCreated, onJoinMeeting }) => {
   const [title, setTitle] = useState('');
@@ -168,6 +170,9 @@ Implement secure user authentication system for the web application.
       <Typography variant="subtitle1" align="center" color="text.secondary" sx={{ mb: 4 }}>
         AI-powered specification review meetings that transform vague requirements into crystal-clear specs
       </Typography>
+
+      <SupabaseStatus />
+      <SupabaseDebugger />
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>

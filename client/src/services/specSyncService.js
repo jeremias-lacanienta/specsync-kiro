@@ -9,22 +9,51 @@ class SpecSyncService {
   // Initialize database tables
   async initializeTables() {
     try {
-      // Create meetings table
-      const { error: meetingsError } = await supabase
+      console.log('🔍 Checking Supabase tables...')
+      
+      // Test meetings table
+      const { data: meetingsTest, error: meetingsError } = await supabase
         .from('meetings')
         .select('id')
         .limit(1)
 
-      if (meetingsError && meetingsError.code === 'PGRST116') {
-        // Table doesn't exist, create it via SQL
-        await this.createTables()
+      if (meetingsError) {
+        console.error('❌ Meetings table error:', meetingsError)
+        if (meetingsError.code === 'PGRST116') {
+          console.log('📝 Tables need to be created in Supabase dashboard')
+          console.log('🔗 Go to: https://bglwfktrttfiicxgigfl.supabase.co')
+          console.log('📋 Run the SQL from supabase-schema.sql file')
+        }
+        return false
       }
 
-      console.log('✅ Supabase tables ready')
+      // Test participants table
+      const { error: participantsError } = await supabase
+        .from('participants')
+        .select('id')
+        .limit(1)
+
+      if (participantsError) {
+        console.error('❌ Participants table error:', participantsError)
+        return false
+      }
+
+      // Test annotations table
+      const { error: annotationsError } = await supabase
+        .from('annotations')
+        .select('id')
+        .limit(1)
+
+      if (annotationsError) {
+        console.error('❌ Annotations table error:', annotationsError)
+        return false
+      }
+
+      console.log('✅ All Supabase tables are ready!')
+      return true
     } catch (error) {
-      console.error('Error initializing tables:', error)
-      // Fallback to creating tables
-      await this.createTables()
+      console.error('❌ Error checking tables:', error)
+      return false
     }
   }
 
@@ -128,9 +157,20 @@ class SpecSyncService {
   // Join a meeting
   async joinMeeting(meetingId, userName, role) {
     try {
+      console.log('Attempting to join meeting:', meetingId)
+      
+      // First, check if the meeting exists
+      const meeting = await this.getMeeting(meetingId)
+      console.log('Meeting found:', meeting)
+      
+      if (!meeting) {
+        throw new Error('Meeting not found')
+      }
+
+      // Add participant to the meeting
       const participantId = uuidv4()
       
-      const { data, error } = await supabase
+      const { data: participantData, error: participantError } = await supabase
         .from('participants')
         .insert([
           {
@@ -142,32 +182,40 @@ class SpecSyncService {
         ])
         .select()
 
-      if (error) {
-        console.error('Error joining meeting:', error)
-        throw error
+      if (participantError) {
+        console.error('Error adding participant:', participantError)
+        // Continue even if participant insertion fails - might be a duplicate
       }
-
-      // Get meeting data
-      const meeting = await this.getMeeting(meetingId)
       
       // Get all participants
-      const { data: participants } = await supabase
+      const { data: participants, error: participantsError } = await supabase
         .from('participants')
         .select('*')
         .eq('meeting_id', meetingId)
 
+      if (participantsError) {
+        console.error('Error getting participants:', participantsError)
+      }
+
       // Get all annotations
-      const { data: annotations } = await supabase
+      const { data: annotations, error: annotationsError } = await supabase
         .from('annotations')
         .select('*')
         .eq('meeting_id', meetingId)
         .order('created_at', { ascending: true })
 
-      return {
+      if (annotationsError) {
+        console.error('Error getting annotations:', annotationsError)
+      }
+
+      const result = {
         ...meeting,
         participants: participants || [],
         annotations: annotations || []
       }
+      
+      console.log('Join meeting result:', result)
+      return result
     } catch (error) {
       console.error('Error in joinMeeting:', error)
       throw error
