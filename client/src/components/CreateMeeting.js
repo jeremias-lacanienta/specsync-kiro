@@ -118,6 +118,7 @@ Implement secure user authentication system for the web application.
         role: userRole.trim() || 'participant'
       };
 
+      console.log('Meeting data received:', meetingData); // Debug log
       onMeetingCreated(meetingData);
       onJoinMeeting(userData);
     } catch (err) {

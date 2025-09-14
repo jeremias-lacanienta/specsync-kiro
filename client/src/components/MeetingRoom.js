@@ -34,6 +34,9 @@ import {
 import specSyncService from '../services/specSyncService';
 
 const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
+  console.log('MeetingRoom received meeting:', meeting); // Debug log
+  console.log('MeetingRoom received user:', user); // Debug log
+
   const [participants, setParticipants] = useState(meeting.participants || []);
   const [annotations, setAnnotations] = useState(meeting.annotations || []);
   const [newAnnotation, setNewAnnotation] = useState('');
@@ -45,7 +48,36 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
   const [copySuccess, setCopySuccess] = useState(false);
   
   const specRef = useRef(null);
-  const specLines = meeting.specContent.split('\n');
+  const specContent = meeting.specContent || meeting.spec_content || '';
+  const specLines = specContent.split('\n');
+
+  // Handle missing meeting data
+  if (!meeting || !meeting.id) {
+    return (
+      <Box sx={{ p: 4, textAlign: 'center' }}>
+        <Alert severity="error">
+          Meeting data is missing. Please try creating or joining a meeting again.
+        </Alert>
+        <Button variant="contained" onClick={onLeaveMeeting} sx={{ mt: 2 }}>
+          Back to Home
+        </Button>
+      </Box>
+    );
+  }
+
+  // Handle missing spec content
+  if (!specContent.trim()) {
+    return (
+      <Box sx={{ p: 4, textAlign: 'center' }}>
+        <Alert severity="warning">
+          No specification content found for this meeting.
+        </Alert>
+        <Button variant="contained" onClick={onLeaveMeeting} sx={{ mt: 2 }}>
+          Back to Home
+        </Button>
+      </Box>
+    );
+  }
 
   // Copy meeting ID to clipboard
   const copyMeetingId = async () => {

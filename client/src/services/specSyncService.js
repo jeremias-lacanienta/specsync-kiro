@@ -116,6 +116,7 @@ class SpecSyncService {
 
       return {
         ...data,
+        specContent: data.spec_content, // Map database field to expected property
         analysis: JSON.parse(data.analysis || '{}')
       }
     } catch (error) {
