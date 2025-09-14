@@ -18,7 +18,7 @@ import {
   ListItemButton
 } from '@mui/material';
 import { Add, VideoCall, Person, Description, Folder } from '@mui/icons-material';
-import axios from 'axios';
+import specSyncService from '../services/specSyncService';
 import { useKiroIntegration } from '../hooks/useKiroIntegration';
 
 const CreateMeeting = ({ onMeetingCreated, onJoinMeeting }) => {
@@ -70,16 +70,16 @@ Implement secure user authentication system for the web application.
     setError('');
 
     try {
-      const response = await axios.post('/api/meetings', {
-        title: title.trim(),
-        specContent: specContent.trim()
-      });
+      const response = await specSyncService.createMeeting(
+        title.trim(),
+        specContent.trim()
+      );
 
       const meetingData = {
-        id: response.data.meetingId,
+        id: response.meetingId,
         title: title.trim(),
         specContent: specContent.trim(),
-        analysis: response.data.analysis
+        analysis: response.analysis
       };
 
       const userData = {

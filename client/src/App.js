@@ -5,6 +5,7 @@ import { Container, AppBar, Toolbar, Typography, Box, Button } from '@mui/materi
 import CreateMeeting from './components/CreateMeeting';
 import MeetingRoom from './components/MeetingRoom';
 import AutoDemo from './components/AutoDemo';
+import specSyncService from './services/specSyncService';
 import './App.css';
 
 const theme = createTheme({
@@ -26,6 +27,11 @@ function App() {
   const [currentMeeting, setCurrentMeeting] = useState(null);
   const [user, setUser] = useState(null);
   const [showDemo, setShowDemo] = useState(false);
+
+  // Initialize Supabase tables on app start
+  useEffect(() => {
+    specSyncService.initializeTables().catch(console.error);
+  }, []);
 
   useEffect(() => {
     // Listen for focus commands from Kiro plugin
