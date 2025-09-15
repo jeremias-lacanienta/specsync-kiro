@@ -171,8 +171,8 @@ Implement secure user authentication system for the web application.
         AI-powered specification review meetings that transform vague requirements into crystal-clear specs
       </Typography>
 
-      <SupabaseStatus />
-      <SupabaseDebugger />
+      {/* <SupabaseStatus /> */}
+      {/* <SupabaseDebugger /> */}
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
