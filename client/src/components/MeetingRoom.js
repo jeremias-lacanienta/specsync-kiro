@@ -39,6 +39,9 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
 
   const [participants, setParticipants] = useState((meeting && meeting.participants) || []);
   const [annotations, setAnnotations] = useState((meeting && meeting.annotations) || []);
+  
+  // Debug log for annotations
+  console.log('Current annotations:', annotations);
   const [newAnnotation, setNewAnnotation] = useState('');
   const [selectedLine, setSelectedLine] = useState(null);
   const [kiroSuggestions, setKiroSuggestions] = useState([]);
@@ -150,7 +153,9 @@ const MeetingRoom = ({ meeting, user, onLeaveMeeting }) => {
   }
 
   const getLineAnnotations = (lineIndex) => {
-    return annotations.filter(ann => ann.lineNumber === lineIndex + 1);
+    const lineAnnotations = annotations.filter(ann => ann.lineNumber === lineIndex + 1);
+    console.log(`Line ${lineIndex + 1} annotations:`, lineAnnotations); // Debug log
+    return lineAnnotations;
   };
 
   const hasAnnotations = (lineIndex) => {

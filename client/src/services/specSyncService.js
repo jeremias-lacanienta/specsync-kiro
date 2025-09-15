@@ -208,10 +208,18 @@ class SpecSyncService {
         console.error('Error getting annotations:', annotationsError)
       }
 
+      // Map database fields to expected properties
+      const mappedAnnotations = (annotations || []).map(ann => ({
+        ...ann,
+        lineNumber: ann.line_number,
+        participantName: ann.participant_name,
+        timestamp: ann.created_at
+      }))
+
       const result = {
         ...meeting,
         participants: participants || [],
-        annotations: annotations || []
+        annotations: mappedAnnotations
       }
       
       console.log('Join meeting result:', result)
@@ -245,7 +253,12 @@ class SpecSyncService {
         throw error
       }
 
-      const annotation = data[0]
+      const annotation = {
+        ...data[0],
+        lineNumber: data[0].line_number, // Map database field to expected property
+        participantName: data[0].participant_name, // Map database field to expected property
+        timestamp: data[0].created_at // Map database field to expected property
+      }
 
       // Simulate Kiro facilitation
       setTimeout(() => {
